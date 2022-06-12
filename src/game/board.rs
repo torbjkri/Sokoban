@@ -1,20 +1,22 @@
 
+#[derive(Copy, Clone)]
 pub struct Position {
-    x: u8,
-    y: u8,
+    pub x: u8,
+    pub y: u8,
 }
 
+#[derive(Copy, Clone)]
 pub struct Size {
-    x: u8,
-    y: u8,
+    pub x: u16,
+    pub y: u16,
 }
 
-pub const BOARD_SIZE: Size = Size{640, 640};
-const UNIT_SIZE: Size = Size{60, 60};
+pub const BOARD_SIZE: Size = Size{x:640, y:640};
+const UNIT_SIZE: Size = Size{x:60, y:60};
 
 pub trait BoardElement {
-    fn board_position() -> Position;
-    fn size() -> Size;
+    fn board_position(&self) -> Position;
+    fn size(&self) -> Size;
 }
 
 pub struct Board {
@@ -27,10 +29,11 @@ impl Board {
 }
 
 impl BoardElement for Board {
-    fn board_position() -> Position {
-        Position{0,0}
+    fn board_position(&self) -> Position {
+        Position{x:0,y:0}
     }
-    fn size() -> Size {
-        BOARD_SIZE / UNIT_SIZE
+    fn size(&self) -> Size {
+        Size{x: BOARD_SIZE.x / UNIT_SIZE.x,
+            y: BOARD_SIZE.y / UNIT_SIZE.y}
     }
 }

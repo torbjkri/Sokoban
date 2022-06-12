@@ -1,7 +1,7 @@
 use super::board::Board;
 use super::yarn::Yarn;
 
-struct GameState {
+pub struct GameState {
     board: Board,
     yarn: Yarn
 }

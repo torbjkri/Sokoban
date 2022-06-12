@@ -6,10 +6,10 @@ pub struct Yarn {
 }
 
 impl Yarn {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self{
-            Position{0,0},
-            Size{1,1}
+            position: Position{x:0,y:0},
+            size: Size{x: 1, y: 1}
         }
     }
     fn set_position(&mut self, position: Position) {
@@ -19,7 +19,7 @@ impl Yarn {
 
 impl BoardElement for Yarn {
     fn board_position(&self) -> Position {
-        self.board_position
+        self.position
     }
     fn size(&self) -> Size {
         self.size

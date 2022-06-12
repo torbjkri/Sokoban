@@ -1,5 +1,5 @@
 use sfml::{
-    graphics::{RenderWindow, RenderTarget, Texture, Sprite, Transformable},
+    graphics::{RenderWindow, RenderTarget, Texture, Transformable},
     window::{ContextSettings,Style, VideoMode, Event},
     SfBox,
     system::{Vector2f, Vector2u},
