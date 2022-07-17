@@ -6,9 +6,9 @@ pub struct Yarn {
 }
 
 impl Yarn {
-    pub fn new() -> Self {
+    pub fn new(position: Position) -> Self {
         Self{
-            position: Position{x:0,y:0},
+            position: position,
             size: Size{x: 1, y: 1}
         }
     }
