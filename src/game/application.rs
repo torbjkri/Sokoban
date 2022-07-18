@@ -9,7 +9,7 @@ pub struct Application<T: Canvas> {
 impl<T: Canvas> Application<T> {
     pub fn run(&mut self) {
         while self.canvas.is_open() {
-            self.canvas.render(&self.game_state);
+            self.canvas.render(&mut self.game_state);
         }
     }
 }

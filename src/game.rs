@@ -10,3 +10,6 @@ pub use self::yarn::Yarn;
 mod yarn;
 pub use self::game_state::GameState;
 mod game_state;
+mod types;
+mod board_element;
+mod movable;

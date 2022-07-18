@@ -1,4 +1,6 @@
-use super::board::{BoardElement, Size, Position};
+use super::board_element::{BoardElement};
+use super::movable::{Movable};
+use crate::game::types::{Position, Size};
 
 pub struct Yarn {
     position: Position,
@@ -23,5 +25,20 @@ impl BoardElement for Yarn {
     }
     fn size(&self) -> Size {
         self.size
+    }
+}
+
+impl Movable for Yarn {
+    fn move_up(&mut self) {
+        self.position.y = self.position.y - 1;
+    }
+    fn move_down(&mut self) {
+        self.position.y = self.position.y + 1;
+    }
+    fn move_left(&mut self) {
+        self.position.x = self.position.x - 1;
+    }
+    fn move_right(&mut self) {
+        self.position.x = self.position.x + 1;
     }
 }

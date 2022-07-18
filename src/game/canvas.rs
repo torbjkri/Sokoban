@@ -6,8 +6,9 @@ use sfml::{
 };
 use super::game_state::GameState;
 use super::yarn::Yarn;
-use super::board::BoardElement;
-use super::board::Position;
+use super::board_element::BoardElement;
+use super::movable::Movable;
+use crate::game::types::Position;
 
 const CANVAS_SIZE: Vector2u = Vector2u::new(800, 600);
 const BOARD_SIZE: Vector2u = Vector2u::new(480, 480);
@@ -16,7 +17,7 @@ const BOARD_MARGINS: Vector2f = Vector2f::new(40.0, 60.0);
 
 pub trait Canvas {
     fn new() -> Self;
-    fn render(&mut self, game_state: &GameState);
+    fn render(&mut self, game_state: &mut GameState);
     fn render_yarn(&mut self, yarn: &Yarn);
     fn render_yarns(&mut self, yarn: &Vec<Yarn>);
     fn render_board(&mut self);
@@ -47,14 +48,19 @@ impl Canvas for SfmlCanvas {
         }
     }
 
-    fn render(&mut self, game_state: &GameState) {
+    fn render(&mut self, game_state: &mut GameState) {
         while let Some(event) = self.window.poll_event() {
-            if event == Event::Closed {
-                self.window.close();
-            } 
-
-            if event == Event::KeyReleased{Key::A} {
-                print!("INPUT");
+            match event {
+                Event::Closed => self.window.close(),
+                Event::KeyReleased {code, ..} => {
+                    if let Key::ESCAPE = code {
+                        self.window.close();
+                    }
+                    if let Key::A = code {
+                        game_state.yarns[0].move_up();
+                    }
+                },
+                _ => {}
             }
         }
         

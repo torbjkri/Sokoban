@@ -1,6 +1,6 @@
 use super::board::Board;
 use super::yarn::Yarn;
-use super::board::{Position};
+use crate::game::types::{Position, Size};
 
 pub struct GameState {
     pub board: Board,
@@ -14,7 +14,7 @@ impl GameState {
         yarns.push(Yarn::new(Position::new(4,3)));
         yarns.push(Yarn::new(Position::new(7,7)));
         Self {
-            board: Board::new(),
+            board: Board::new(Size::new(8,8)),
             yarns: yarns,
         }
     }
