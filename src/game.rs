@@ -1,4 +1,5 @@
 pub use self::application::Application;
+pub use self::application::CANVAS_SIZE;
 mod application;
 
 pub use self::canvas::{Canvas, SfmlCanvas};

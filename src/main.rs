@@ -4,7 +4,7 @@ mod game;
 
 fn main() {
     let mut sokoban = Application{
-        canvas: SfmlCanvas::new(),
+        canvas: SfmlCanvas::new(game::CANVAS_SIZE),
         game_state: GameState::new(),
     };
     sokoban.run();

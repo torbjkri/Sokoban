@@ -21,12 +21,12 @@ impl Add for Position {
 
 #[derive(Copy, Clone)]
 pub struct Size {
-    pub x: u16,
-    pub y: u16,
+    pub x: u32,
+    pub y: u32,
 }
 
 impl Size{
-    pub fn new(x: u16, y: u16) -> Self {
+    pub const fn new(x: u32, y: u32) -> Self {
         Self {x, y}
     }
 }

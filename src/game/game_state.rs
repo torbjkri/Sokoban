@@ -1,6 +1,8 @@
 use super::board::Board;
 use super::yarn::Yarn;
 use crate::game::types::{Position, Size};
+use super::canvas::CanvasEvents;
+use super::movable::Movable;
 
 pub struct GameState {
     pub board: Board,
@@ -16,6 +18,21 @@ impl GameState {
         Self {
             board: Board::new(Size::new(8,8)),
             yarns: yarns,
+        }
+    }
+
+    pub fn update(&mut self, events: CanvasEvents) {
+        if events.a_pressed {
+            self.yarns[0].move_left();
+        }
+        else if events.w_pressed {
+            self.yarns[0].move_up();
+        }
+        else if events.s_pressed {
+            self.yarns[0].move_down();
+        }
+        else if events.d_pressed {
+            self.yarns[0].move_right();
         }
     }
 }
