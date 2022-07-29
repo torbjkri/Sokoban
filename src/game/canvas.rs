@@ -1,5 +1,6 @@
 use super::game_state::GameState;
 use super::yarn::Yarn;
+use super::player::Player;
 use super::types::Size;
 
 const BOARD_SIZE: Size = Size::new(480, 480);
@@ -18,6 +19,7 @@ pub trait Canvas {
     fn render(&mut self, game_state: &mut GameState);
     fn render_yarn(&mut self, yarn: &Yarn);
     fn render_yarns(&mut self, yarn: &Vec<Yarn>);
+    fn render_player(&mut self, yarn: &Player);
     fn render_board(&mut self);
     fn is_open(&self) -> bool;
     fn poll_events(&mut self) -> CanvasEvents;

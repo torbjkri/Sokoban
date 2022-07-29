@@ -2,6 +2,7 @@ use super::super::board_element::BoardElement;
 use super::super::game_state::GameState;
 use super::super::movable::Movable;
 use super::super::yarn::Yarn;
+use super::super::player::Player;
 use super::{Canvas, CanvasEvents, BOARD_MARGINS, UNIT_SIZE};
 use crate::game::types::{Position, Size};
 use sfml::{
@@ -15,6 +16,7 @@ pub struct SfmlCanvas {
     window: RenderWindow,
     board_texture: SfBox<Texture>,
     box_texture: SfBox<Texture>,
+    player_texture: SfBox<Texture>
 }
 
 impl Canvas for SfmlCanvas {
@@ -29,10 +31,12 @@ impl Canvas for SfmlCanvas {
 
         let board_texture = load_texture_file("assets/board8by8.png");
         let box_texture = load_texture_file("assets/niceboxsprite.jpg");
+        let player_texture = load_texture_file("assets/cola.jpg");
         SfmlCanvas {
             window,
             board_texture,
             box_texture,
+            player_texture,
         }
     }
 
@@ -73,6 +77,7 @@ impl Canvas for SfmlCanvas {
         self.window.set_active(true);
         self.render_board();
         self.render_yarns(&game_state.yarns);
+        self.render_player(&game_state.player);
 
         self.window.display();
     }
@@ -94,11 +99,17 @@ impl Canvas for SfmlCanvas {
         sprite.set_position(canvas_position_from_board_position(yarn.board_position()));
         self.window.draw(&sprite);
     }
-
     fn render_yarns(&mut self, yarns: &Vec<Yarn>) {
         for yarn in yarns.iter() {
             self.render_yarn(yarn);
         }
+    }
+
+    fn render_player(&mut self, player: &Player) {
+        let mut sprite = sfml::graphics::Sprite::with_texture(&self.player_texture);
+        sprite.set_scale(texture_scale(self.player_texture.size(), Vector2u::new(1, 1)));
+        sprite.set_position(canvas_position_from_board_position(player.board_position()));
+        self.window.draw(&sprite);
     }
 
     fn is_open(&self) -> bool {
