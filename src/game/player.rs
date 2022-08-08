@@ -69,3 +69,57 @@ impl Movable for Player {
         }
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_default() {
+        let player = Player::new(Position::new(5,5));
+        assert_eq!(player.position,  Position::new(5,5));
+        assert_eq!(player.size, Size::new(1,1));
+    }
+
+    #[test]
+    fn test_moves() {
+        let mut player = Player::new(Position::new(5,5));
+        player.move_up();
+        assert_eq!(player.position,  Position::new(5,4));
+        player.move_left();
+        assert_eq!(player.position,  Position::new(4,4));
+        player.move_down();
+        assert_eq!(player.position,  Position::new(4,5));
+        player.move_right();
+        assert_eq!(player.position,  Position::new(5,5));
+    }
+
+    #[test]
+    fn test_undow_last_move() {
+        let mut player = Player::new(Position::new(5,5));
+        player.move_up();
+        assert_eq!(player.position,  Position::new(5,4));
+        player.undo_last_move();
+        assert_eq!(player.position,  Position::new(5,5));
+    }
+
+    #[test]
+    fn test_undoing_twice_does_nothing() {
+        let mut player = Player::new(Position::new(5,5));
+        player.move_up();
+        assert_eq!(player.position,  Position::new(5,4));
+        player.undo_last_move();
+        assert_eq!(player.position,  Position::new(5,5));
+        player.undo_last_move();
+        assert_eq!(player.position,  Position::new(5,5));
+    }
+
+    #[test]
+    fn test_undoing_before_moving_does_nothing() {
+        let mut player = Player::new(Position::new(5,5));
+        player.undo_last_move();
+        assert_eq!(player.position,  Position::new(5,5));
+    }
+}
+

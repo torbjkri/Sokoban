@@ -1,13 +1,13 @@
 use std::ops::Add;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Position {
-    pub x: u8,
-    pub y: u8,
+    pub x: i32,
+    pub y: i32,
 }
 
 impl Position {
-    pub fn new(x: u8, y: u8) -> Self {
+    pub fn new(x: i32, y: i32) -> Self {
         Self {x, y}
     }
 }
@@ -19,7 +19,7 @@ impl Add for Position {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 pub struct Size {
     pub x: u32,
     pub y: u32,

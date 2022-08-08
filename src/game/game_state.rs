@@ -37,7 +37,8 @@ impl GameState {
         else if events.d_pressed {
             self.player.move_right();
         }
-        else if events.r_pressed {
+
+        if self.board.is_element_outside(&self.player) {
             self.player.undo_last_move();
         }
     }

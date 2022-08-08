@@ -45,7 +45,6 @@ impl Canvas for SfmlCanvas {
             w_pressed: false,
             s_pressed: false,
             d_pressed: false,
-            r_pressed: false,
         };
         while let Some(event) = self.window.poll_event() {
             match event {
@@ -65,9 +64,6 @@ impl Canvas for SfmlCanvas {
                     }
                     if let Key::D = code {
                         canvas_events.d_pressed = true;
-                    }
-                    if let Key::R = code {
-                        canvas_events.r_pressed = true;
                     }
                 }
                 _ => {}
