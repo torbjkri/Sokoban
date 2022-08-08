@@ -4,7 +4,7 @@ SFML Rust implementation of [Sokoban](https://en.wikipedia.org/wiki/Sokoban)
 This is a beginner project for learning Rust.
 
 ## ToDo
-- Check out of bounds
+- Detect collision with other board elements
 - How should collisions be done?
   - Track last 2 moves?
   - Movement queue?

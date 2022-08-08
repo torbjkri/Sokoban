@@ -1,5 +1,6 @@
 use super::board_element::BoardElement;
 use super::movable::{Movable, Move};
+use super::collidable::Collidable;
 use crate::game::types::{Position, Size};
 
 pub struct Player {
@@ -67,6 +68,12 @@ impl Movable for Player {
             }
             _ => {}
         }
+    }
+}
+
+impl Collidable for Player {
+    fn check_collision(&self, other: &dyn Collidable) {
+        
     }
 }
 
