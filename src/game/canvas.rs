@@ -11,7 +11,8 @@ pub struct CanvasEvents {
     pub a_pressed: bool,
     pub w_pressed: bool,
     pub s_pressed: bool,
-    pub d_pressed: bool
+    pub d_pressed: bool,
+    pub r_pressed: bool
 }
 
 pub trait Canvas {

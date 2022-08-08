@@ -37,5 +37,8 @@ impl GameState {
         else if events.d_pressed {
             self.player.move_right();
         }
+        else if events.r_pressed {
+            self.player.undo_last_move();
+        }
     }
 }

@@ -1,6 +1,5 @@
 use super::super::board_element::BoardElement;
 use super::super::game_state::GameState;
-use super::super::movable::Movable;
 use super::super::yarn::Yarn;
 use super::super::player::Player;
 use super::{Canvas, CanvasEvents, BOARD_MARGINS, UNIT_SIZE};
@@ -46,6 +45,7 @@ impl Canvas for SfmlCanvas {
             w_pressed: false,
             s_pressed: false,
             d_pressed: false,
+            r_pressed: false,
         };
         while let Some(event) = self.window.poll_event() {
             match event {
@@ -65,6 +65,9 @@ impl Canvas for SfmlCanvas {
                     }
                     if let Key::D = code {
                         canvas_events.d_pressed = true;
+                    }
+                    if let Key::R = code {
+                        canvas_events.r_pressed = true;
                     }
                 }
                 _ => {}
