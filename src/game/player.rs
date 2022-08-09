@@ -17,9 +17,6 @@ impl Player {
             last_move: Move::None,
         }
     }
-    fn set_position(&mut self, position: Position) {
-        self.position = position;
-    }
 }
 
 impl BoardElement for Player {
@@ -72,7 +69,7 @@ impl Movable for Player {
 }
 
 impl Collidable for Player {
-    fn check_collision(&self, other: &dyn Collidable) {
+    fn check_collision(&self, other: &dyn Collidable) -> bool {
         
     }
 }
@@ -127,6 +124,20 @@ mod tests {
         let mut player = Player::new(Position::new(5,5));
         player.undo_last_move();
         assert_eq!(player.position,  Position::new(5,5));
+    }
+
+    #[test]
+    fn test_non_collision_when_not_overlapping() {
+        let player1 = Player::new(Position::new(5,5));
+        let player2 = Player::new(Position::new(5,4));
+        assert_eq!(player1.check_collision(&player2), false);
+    }
+
+    #[test]
+    fn test_collision_when_overlapping() {
+        let player1 = Player::new(Position::new(5,5));
+        let player2 = Player::new(Position::new(5,5));
+        assert_eq!(player1.check_collision(&player2), true);
     }
 }
 

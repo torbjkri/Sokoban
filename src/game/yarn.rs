@@ -16,9 +16,6 @@ impl Yarn {
             last_move: Move::None,
         }
     }
-    fn set_position(&mut self, position: Position) {
-        self.position = position; 
-    }
 }
 
 impl BoardElement for Yarn {

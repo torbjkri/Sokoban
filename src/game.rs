@@ -16,3 +16,4 @@ mod game_state;
 mod types;
 mod board_element;
 mod movable;
+mod collidable;
