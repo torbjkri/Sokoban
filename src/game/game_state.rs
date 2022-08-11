@@ -39,8 +39,31 @@ impl GameState {
         if self.board.is_element_outside(&self.player) {
             self.player.undo_last_action();
         }
+
+        resolve_collisions();
         if self.player_collide_with_yarn() {
             // self.player.undo_last_action();
+            self.resolve_collisions();
+        }
+    }
+
+    fn resolve_collisions(&mut self) {
+        for i in 0..self.yarns.len() {
+            if self.player.check_collision(&self.yarns[i]) {
+                self.yarns[i].do_action(self.player.get_last_action());
+                if !resolve_yarn_collisions() {
+                    self.player.undo_last_action();
+                }
+                return;
+            }
+        }
+    }
+
+    fn resolve_yarn_collisions(&mut self) {
+        for i in 0..self.yarns.len() {
+            if self.yarn_collide_with_other_yarns(i) {
+                self.yarns[i].
+            }
         }
     }
 
@@ -63,6 +86,14 @@ impl GameState {
             }
         }
         false
+    }
+
+    fn resolve_collisions(&mut self) {
+        for i in 0..self.yarns.len() {
+            if self.yarn_collide_with_other_yarns(i) {
+                
+            }
+        }
     }
 
 }
