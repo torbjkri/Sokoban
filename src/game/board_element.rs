@@ -1,6 +1,6 @@
-use crate::game::types::{Position, Size};
+use crate::game::types::{Position};
 
 pub trait BoardElement {
     fn board_position(&self) -> Position;
-    fn size(&self) -> Size;
+    fn check_collision(&self, other: &dyn BoardElement) -> bool;
 }

@@ -35,8 +35,8 @@ mod tests {
         fn board_position(&self) -> Position {
             self.position
         }
-        fn size(&self) -> Size {
-            Size::new(1,1)
+        fn check_collision(&self, _other: &dyn BoardElement) -> bool {
+            false
         }
     }
 
