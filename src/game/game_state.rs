@@ -36,64 +36,42 @@ impl GameState {
             self.player.move_right();
         }
 
-        if self.board.is_element_outside(&self.player) {
+        if !self.player_has_legal_position() {
             self.player.undo_last_action();
         }
-
-        resolve_collisions();
-        if self.player_collide_with_yarn() {
-            // self.player.undo_last_action();
-            self.resolve_collisions();
-        }
     }
 
-    fn resolve_collisions(&mut self) {
+    fn player_has_legal_position(&mut self) -> bool {
+        if self.board.is_element_outside(&self.player) {
+            return false;
+        }
+
         for i in 0..self.yarns.len() {
-            if self.player.check_collision(&self.yarns[i]) {
+            if self.player.board_position() == self.yarns[i].board_position() {
                 self.yarns[i].do_action(self.player.get_last_action());
-                if !resolve_yarn_collisions() {
-                    self.player.undo_last_action();
+                if !self.yarn_has_legal_position(i) {
+                    self.yarns[i].undo_last_action();
+                    return false;
                 }
-                return;
+                return true
             }
         }
+        true
     }
 
-    fn resolve_yarn_collisions(&mut self) {
-        for i in 0..self.yarns.len() {
-            if self.yarn_collide_with_other_yarns(i) {
-                self.yarns[i].
-            }
+    fn yarn_has_legal_position(&mut self, idx: usize) -> bool {
+        if self.board.is_element_outside(&self.yarns[idx]) {
+            return false;
         }
-    }
 
-    fn player_collide_with_yarn(&mut self) -> bool {
-        for yarn in &mut self.yarns {
-            if self.player.check_collision(yarn) {
-                yarn.do_action(self.player.get_last_action());
-                return true;
-            }
-        }
-        false
-    }
-
-    fn yarn_collide_with_other_yarns(&mut self, idx: usize) -> bool {
         for (i, yarn) in self.yarns.iter().enumerate() {
             if i != idx {
-                if self.yarns[idx].check_collision(yarn) {
-                    return true;
+                if self.yarns[idx].board_position() == yarn.board_position() {
+                    return false;
                 }
             }
         }
-        false
-    }
-
-    fn resolve_collisions(&mut self) {
-        for i in 0..self.yarns.len() {
-            if self.yarn_collide_with_other_yarns(i) {
-                
-            }
-        }
+        true
     }
 
 }
@@ -111,35 +89,71 @@ mod tests {
     }
 
     #[test]
-    fn test_player_collide_with_yarn() {
+    fn test_player_outside_board_illegal() {
         let mut state = create_test_game_state(
             Board::new(Size::new(1, 1)),
-            vec![Yarn::new(Position::new(1, 1))],
+            vec![],
             Player::new(Position::new(1, 1)),
         );
-        assert_eq!(state.player_collide_with_yarn(), true);
+        assert_eq!(state.player_has_legal_position(), false);
     }
 
     #[test]
-    fn test_player_move_into_yarn_move_yarn() {
+    fn test_yarn_outside_board_illegal() {
+        let mut state = create_test_game_state(
+            Board::new(Size::new(1, 1)),
+            vec![Yarn::new(Position::new(1,1))],
+            Player::new(Position::new(0, 0)),
+        );
+        assert_eq!(state.yarn_has_legal_position(0), false);
+    }
+
+    #[test]
+    fn test_yarn_on_yarn_illegal() {
+        let mut state = create_test_game_state(
+            Board::new(Size::new(1, 1)),
+            vec![Yarn::new(Position::new(0,0)), Yarn::new(Position::new(0,0))],
+            Player::new(Position::new(1, 1)),
+        );
+        assert_eq!(state.yarn_has_legal_position(0), false);
+    }
+
+    #[test]
+    fn test_player_move_into_yarn_moves_yarn() {
         let mut state = create_test_game_state(
             Board::new(Size::new(3, 1)),
-            vec![Yarn::new(Position::new(1, 0))],
+            vec![Yarn::new(Position::new(1,0))],
             Player::new(Position::new(0, 0)),
         );
-        assert_eq!(state.player_collide_with_yarn(), false);
-        state.player.move_right();
-        assert_eq!(state.player_collide_with_yarn(), true);
-        assert_eq!(state.yarns[0].board_position(), Position::new(2,1));
+        assert_eq!(state.player_has_legal_position(), true);
+        assert_eq!(state.yarn_has_legal_position(0), true);
+        let mut events =  CanvasEvents::new();
+        events.d_pressed = true;
+        state.update(events);
+
+        assert_eq!(state.player_has_legal_position(), true);
+        assert_eq!(state.yarn_has_legal_position(0), true);
+        assert_eq!(state.player.board_position(), Position::new(1,0));
+        assert_eq!(state.yarns[0].board_position(), Position::new(2,0));
     }
 
     #[test]
-    fn test_yarn_collide_with_yarn() {
+    fn test_player_move_into_yarn_moves_yarn_if_illegal_reset() {
         let mut state = create_test_game_state(
-            Board::new(Size::new(2, 1)),
-            vec![Yarn::new(Position::new(1, 0)), Yarn::new(Position::new(1,0))],
+            Board::new(Size::new(3, 1)),
+            vec![Yarn::new(Position::new(1,0)), Yarn::new(Position::new(2,0))],
             Player::new(Position::new(0, 0)),
         );
-        assert_eq!(state.yarn_collide_with_other_yarns(0), true);
+        assert_eq!(state.player_has_legal_position(), true);
+        assert_eq!(state.yarn_has_legal_position(0), true);
+        let mut events =  CanvasEvents::new();
+        events.d_pressed = true;
+        state.update(events);
+
+        assert_eq!(state.player_has_legal_position(), true);
+        assert_eq!(state.yarn_has_legal_position(0), true);
+        assert_eq!(state.player.board_position(), Position::new(0,0));
+        assert_eq!(state.yarns[0].board_position(), Position::new(1,0));
+        assert_eq!(state.yarns[1].board_position(), Position::new(2,0));
     }
 }

@@ -40,12 +40,7 @@ impl Canvas for SfmlCanvas {
     }
 
     fn poll_events(&mut self) -> CanvasEvents {
-        let mut canvas_events = CanvasEvents {
-            a_pressed: false,
-            w_pressed: false,
-            s_pressed: false,
-            d_pressed: false,
-        };
+        let mut canvas_events = CanvasEvents::new();
         while let Some(event) = self.window.poll_event() {
             match event {
                 Event::Closed => self.window.close(),

@@ -1,7 +1,7 @@
 use super::game_state::GameState;
-use super::yarn::Yarn;
 use super::player::Player;
 use super::types::Size;
+use super::yarn::Yarn;
 
 const BOARD_SIZE: Size = Size::new(480, 480);
 const UNIT_SIZE: Size = Size::new(60, 60);
@@ -12,6 +12,17 @@ pub struct CanvasEvents {
     pub w_pressed: bool,
     pub s_pressed: bool,
     pub d_pressed: bool,
+}
+
+impl CanvasEvents {
+    pub fn new() -> Self {
+        Self {
+            a_pressed: false,
+            w_pressed: false,
+            s_pressed: false,
+            d_pressed: false,
+        }
+    }
 }
 
 pub trait Canvas {
