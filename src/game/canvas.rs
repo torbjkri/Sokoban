@@ -2,6 +2,7 @@ use super::game_state::GameState;
 use super::player::Player;
 use super::types::Size;
 use super::yarn::Yarn;
+use super::basket::Basket;
 
 const BOARD_SIZE: Size = Size::new(480, 480);
 const UNIT_SIZE: Size = Size::new(60, 60);
@@ -30,6 +31,8 @@ pub trait Canvas {
     fn render(&mut self, game_state: &mut GameState);
     fn render_yarn(&mut self, yarn: &Yarn);
     fn render_yarns(&mut self, yarn: &Vec<Yarn>);
+    fn render_basket(&mut self, yarn: &Basket);
+    fn render_baskets(&mut self, yarn: &Vec<Basket>);
     fn render_player(&mut self, yarn: &Player);
     fn render_board(&mut self);
     fn is_open(&self) -> bool;

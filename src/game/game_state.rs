@@ -4,12 +4,14 @@ use super::canvas::CanvasEvents;
 use super::movable::Movable;
 use super::player::Player;
 use super::yarn::Yarn;
+use super::basket::Basket;
 use crate::game::types::{Position, Size};
 
 pub struct GameState {
     pub board: Board,
     pub yarns: Vec<Yarn>,
     pub player: Player,
+    pub baskets: Vec<Basket>,
 }
 
 impl GameState {
@@ -18,10 +20,14 @@ impl GameState {
         yarns.push(Yarn::new(Position::new(1, 1)));
         yarns.push(Yarn::new(Position::new(4, 3)));
         yarns.push(Yarn::new(Position::new(7, 7)));
+
+        let mut baskets = Vec::new();
+        baskets.push(Basket::new(Position::new(3,3)));
         Self {
             board: Board::new(Size::new(8, 8)),
             yarns: yarns,
             player: Player::new(Position::new(0, 0)),
+            baskets: baskets,
         }
     }
 
@@ -80,11 +86,12 @@ impl GameState {
 mod tests {
     use super::*;
 
-    fn create_test_game_state(board: Board, yarns: Vec<Yarn>, player: Player) -> GameState {
+    fn create_test_game_state(board: Board, yarns: Vec<Yarn>, player: Player, baskets: Vec<Basket>) -> GameState {
         GameState {
             board,
             yarns,
             player,
+            baskets,
         }
     }
 
@@ -94,6 +101,7 @@ mod tests {
             Board::new(Size::new(1, 1)),
             vec![],
             Player::new(Position::new(1, 1)),
+            vec![]
         );
         assert_eq!(state.player_has_legal_position(), false);
     }
@@ -104,6 +112,7 @@ mod tests {
             Board::new(Size::new(1, 1)),
             vec![Yarn::new(Position::new(1,1))],
             Player::new(Position::new(0, 0)),
+            vec![]
         );
         assert_eq!(state.yarn_has_legal_position(0), false);
     }
@@ -114,6 +123,7 @@ mod tests {
             Board::new(Size::new(1, 1)),
             vec![Yarn::new(Position::new(0,0)), Yarn::new(Position::new(0,0))],
             Player::new(Position::new(1, 1)),
+            vec![]
         );
         assert_eq!(state.yarn_has_legal_position(0), false);
     }
@@ -124,6 +134,7 @@ mod tests {
             Board::new(Size::new(3, 1)),
             vec![Yarn::new(Position::new(1,0))],
             Player::new(Position::new(0, 0)),
+            vec![]
         );
         assert_eq!(state.player_has_legal_position(), true);
         assert_eq!(state.yarn_has_legal_position(0), true);
@@ -143,6 +154,7 @@ mod tests {
             Board::new(Size::new(3, 1)),
             vec![Yarn::new(Position::new(1,0)), Yarn::new(Position::new(2,0))],
             Player::new(Position::new(0, 0)),
+            vec![]
         );
         assert_eq!(state.player_has_legal_position(), true);
         assert_eq!(state.yarn_has_legal_position(0), true);

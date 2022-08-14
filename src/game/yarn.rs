@@ -88,5 +88,4 @@ impl Movable for Yarn {
         }
         self.last_action = action;
     }
-
 }

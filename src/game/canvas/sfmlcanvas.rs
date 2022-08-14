@@ -1,6 +1,7 @@
 use super::super::board_element::BoardElement;
 use super::super::game_state::GameState;
 use super::super::yarn::Yarn;
+use super::super::basket::Basket;
 use super::super::player::Player;
 use super::{Canvas, CanvasEvents, BOARD_MARGINS, UNIT_SIZE};
 use crate::game::types::{Position, Size};
@@ -15,7 +16,8 @@ pub struct SfmlCanvas {
     window: RenderWindow,
     board_texture: SfBox<Texture>,
     box_texture: SfBox<Texture>,
-    player_texture: SfBox<Texture>
+    player_texture: SfBox<Texture>,
+    basket_texture: SfBox<Texture>
 }
 
 impl Canvas for SfmlCanvas {
@@ -31,11 +33,13 @@ impl Canvas for SfmlCanvas {
         let board_texture = load_texture_file("assets/board8by8.png");
         let box_texture = load_texture_file("assets/niceboxsprite.jpg");
         let player_texture = load_texture_file("assets/cola.jpg");
+        let basket_texture = load_texture_file("assets/pant-kasse.jpg");
         SfmlCanvas {
             window,
             board_texture,
             box_texture,
             player_texture,
+            basket_texture,
         }
     }
 
@@ -70,6 +74,7 @@ impl Canvas for SfmlCanvas {
     fn render(&mut self, game_state: &mut GameState) {
         self.window.set_active(true);
         self.render_board();
+        self.render_baskets(&game_state.baskets);
         self.render_yarns(&game_state.yarns);
         self.render_player(&game_state.player);
 
@@ -96,6 +101,18 @@ impl Canvas for SfmlCanvas {
     fn render_yarns(&mut self, yarns: &Vec<Yarn>) {
         for yarn in yarns.iter() {
             self.render_yarn(yarn);
+        }
+    }
+
+    fn render_basket(&mut self, basket: &Basket) {
+        let mut sprite = sfml::graphics::Sprite::with_texture(&self.basket_texture);
+        sprite.set_scale(texture_scale(self.basket_texture.size(), Vector2u::new(1, 1)));
+        sprite.set_position(canvas_position_from_board_position(basket.board_position()));
+        self.window.draw(&sprite);
+    }
+    fn render_baskets(&mut self, basket: &Vec<Basket>) {
+        for basket in basket.iter() {
+            self.render_basket(basket);
         }
     }
 
