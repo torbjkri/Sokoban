@@ -4,10 +4,8 @@ SFML Rust implementation of [Sokoban](https://en.wikipedia.org/wiki/Sokoban)
 This is a beginner project for learning Rust.
 
 ## ToDo
-- Detect collision with other board elements
-- How should collisions be done?
-  - Track last 2 moves?
-  - Movement queue?
-  - Precheck position before move?
-Jeg tenker ha en movement kø og pushe og poppe til den,
+- Legg inn vegger
+- Detekter kollisjon mellom spiller og vegg
+- Detekter kollisjon mellom boks og vegg
 
+- Lag bane
