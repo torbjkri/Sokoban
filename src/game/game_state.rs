@@ -1,10 +1,10 @@
+use super::basket::Basket;
 use super::board::Board;
 use super::board_element::BoardElement;
 use super::canvas::CanvasEvents;
 use super::movable::Movable;
 use super::player::Player;
 use super::yarn::Yarn;
-use super::basket::Basket;
 use crate::game::types::{Position, Size};
 
 pub struct GameState {
@@ -22,7 +22,8 @@ impl GameState {
         yarns.push(Yarn::new(Position::new(7, 7)));
 
         let mut baskets = Vec::new();
-        baskets.push(Basket::new(Position::new(3,3)));
+        baskets.push(Basket::new(Position::new(3, 3)));
+        baskets.push(Basket::new(Position::new(6, 4)));
         Self {
             board: Board::new(Size::new(8, 8)),
             yarns: yarns,
@@ -45,6 +46,10 @@ impl GameState {
         if !self.player_has_legal_position() {
             self.player.undo_last_action();
         }
+
+        if self.winning() {
+            print!("HURRA!\n");
+        }
     }
 
     fn player_has_legal_position(&mut self) -> bool {
@@ -59,7 +64,7 @@ impl GameState {
                     self.yarns[i].undo_last_action();
                     return false;
                 }
-                return true
+                return true;
             }
         }
         true
@@ -80,13 +85,35 @@ impl GameState {
         true
     }
 
+    fn basket_has_yarn(&self, idx: usize) -> bool {
+        for yarn in &self.yarns {
+            if yarn.check_collision(&self.baskets[idx]) {
+                return true;
+            }
+        }
+        false
+    }
+
+    fn winning(&self) -> bool {
+        for i in 0..self.baskets.len() {
+            if !self.basket_has_yarn(i) {
+                return false;
+            }
+        }
+        true
+    }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    fn create_test_game_state(board: Board, yarns: Vec<Yarn>, player: Player, baskets: Vec<Basket>) -> GameState {
+    fn create_test_game_state(
+        board: Board,
+        yarns: Vec<Yarn>,
+        player: Player,
+        baskets: Vec<Basket>,
+    ) -> GameState {
         GameState {
             board,
             yarns,
@@ -101,7 +128,7 @@ mod tests {
             Board::new(Size::new(1, 1)),
             vec![],
             Player::new(Position::new(1, 1)),
-            vec![]
+            vec![],
         );
         assert_eq!(state.player_has_legal_position(), false);
     }
@@ -110,9 +137,9 @@ mod tests {
     fn test_yarn_outside_board_illegal() {
         let mut state = create_test_game_state(
             Board::new(Size::new(1, 1)),
-            vec![Yarn::new(Position::new(1,1))],
+            vec![Yarn::new(Position::new(1, 1))],
             Player::new(Position::new(0, 0)),
-            vec![]
+            vec![],
         );
         assert_eq!(state.yarn_has_legal_position(0), false);
     }
@@ -121,9 +148,12 @@ mod tests {
     fn test_yarn_on_yarn_illegal() {
         let mut state = create_test_game_state(
             Board::new(Size::new(1, 1)),
-            vec![Yarn::new(Position::new(0,0)), Yarn::new(Position::new(0,0))],
+            vec![
+                Yarn::new(Position::new(0, 0)),
+                Yarn::new(Position::new(0, 0)),
+            ],
             Player::new(Position::new(1, 1)),
-            vec![]
+            vec![],
         );
         assert_eq!(state.yarn_has_legal_position(0), false);
     }
@@ -132,40 +162,79 @@ mod tests {
     fn test_player_move_into_yarn_moves_yarn() {
         let mut state = create_test_game_state(
             Board::new(Size::new(3, 1)),
-            vec![Yarn::new(Position::new(1,0))],
+            vec![Yarn::new(Position::new(1, 0))],
             Player::new(Position::new(0, 0)),
-            vec![]
+            vec![],
         );
         assert_eq!(state.player_has_legal_position(), true);
         assert_eq!(state.yarn_has_legal_position(0), true);
-        let mut events =  CanvasEvents::new();
+        let mut events = CanvasEvents::new();
         events.d_pressed = true;
         state.update(events);
 
         assert_eq!(state.player_has_legal_position(), true);
         assert_eq!(state.yarn_has_legal_position(0), true);
-        assert_eq!(state.player.board_position(), Position::new(1,0));
-        assert_eq!(state.yarns[0].board_position(), Position::new(2,0));
+        assert_eq!(state.player.board_position(), Position::new(1, 0));
+        assert_eq!(state.yarns[0].board_position(), Position::new(2, 0));
     }
 
     #[test]
     fn test_player_move_into_yarn_moves_yarn_if_illegal_reset() {
         let mut state = create_test_game_state(
             Board::new(Size::new(3, 1)),
-            vec![Yarn::new(Position::new(1,0)), Yarn::new(Position::new(2,0))],
+            vec![
+                Yarn::new(Position::new(1, 0)),
+                Yarn::new(Position::new(2, 0)),
+            ],
             Player::new(Position::new(0, 0)),
-            vec![]
+            vec![],
         );
         assert_eq!(state.player_has_legal_position(), true);
         assert_eq!(state.yarn_has_legal_position(0), true);
-        let mut events =  CanvasEvents::new();
+        let mut events = CanvasEvents::new();
         events.d_pressed = true;
         state.update(events);
 
         assert_eq!(state.player_has_legal_position(), true);
         assert_eq!(state.yarn_has_legal_position(0), true);
-        assert_eq!(state.player.board_position(), Position::new(0,0));
-        assert_eq!(state.yarns[0].board_position(), Position::new(1,0));
-        assert_eq!(state.yarns[1].board_position(), Position::new(2,0));
+        assert_eq!(state.player.board_position(), Position::new(0, 0));
+        assert_eq!(state.yarns[0].board_position(), Position::new(1, 0));
+        assert_eq!(state.yarns[1].board_position(), Position::new(2, 0));
+    }
+
+    #[test]
+    fn basket_detects_yarn() {
+        let mut state = create_test_game_state(
+            Board::new(Size::new(2, 1)),
+            vec![Yarn::new(Position::new(1, 0))],
+            Player::new(Position::new(0, 0)),
+            vec![Basket::new(Position::new(1, 0))],
+        );
+
+        assert_eq!(state.basket_has_yarn(0), true);
+    }
+
+    #[test]
+    fn test_not_winning() {
+        let mut state = create_test_game_state(
+            Board::new(Size::new(3, 1)),
+            vec![Yarn::new(Position::new(1, 0))],
+            Player::new(Position::new(0, 0)),
+            vec![Basket::new(Position::new(2, 0))],
+        );
+
+        assert_eq!(state.winning(), false);
+    }
+
+    #[test]
+    fn test_winning() {
+        let mut state = create_test_game_state(
+            Board::new(Size::new(3, 1)),
+            vec![Yarn::new(Position::new(2, 0)), Yarn::new(Position::new(1,0))],
+            Player::new(Position::new(0, 0)),
+            vec![Basket::new(Position::new(2, 0))],
+        );
+
+        assert_eq!(state.winning(), true);
     }
 }
