@@ -40,7 +40,7 @@ pub trait Canvas {
     fn render_wall(&mut self, wall: &Wall);
     fn is_open(&self) -> bool;
     fn poll_events(&mut self) -> CanvasEvents;
-    fn render_winning_text(&mut self);
+    fn render_winning_text(&mut self, winning: bool);
 }
 
 pub use self::sfmlcanvas::SfmlCanvas;

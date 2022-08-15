@@ -7,7 +7,7 @@ use super::super::player::Player;
 use super::{Canvas, CanvasEvents, BOARD_MARGINS, UNIT_SIZE};
 use crate::game::types::{Position, Size};
 use sfml::{
-    graphics::{RenderTarget, RenderWindow, Texture, Transformable},
+    graphics::{RenderTarget, RenderWindow, Texture, Transformable, Font, Text},
     system::{Vector2f, Vector2u},
     window::{ContextSettings, Event, Key, Style, VideoMode},
     SfBox,
@@ -19,7 +19,8 @@ pub struct SfmlCanvas {
     box_texture: SfBox<Texture>,
     player_texture: SfBox<Texture>,
     basket_texture: SfBox<Texture>,
-    wall_texture: SfBox<Texture>
+    wall_texture: SfBox<Texture>,
+    font: SfBox<Font>,
 }
 
 impl Canvas for SfmlCanvas {
@@ -37,6 +38,13 @@ impl Canvas for SfmlCanvas {
         let player_texture = load_texture_file("assets/cola.jpg");
         let basket_texture = load_texture_file("assets/pant-kasse.jpg");
         let wall_texture = load_texture_file("assets/fake.jpg");
+        let find_font = || -> SfBox<Font> {
+            match Font::from_file("assets/LEMONMILK-Bold.otf") {
+                None => panic!("Unable to read font!"),
+                Some(font) => return font,
+            }
+        };
+        let font = find_font();
 
         SfmlCanvas {
             window,
@@ -45,6 +53,7 @@ impl Canvas for SfmlCanvas {
             player_texture,
             basket_texture,
             wall_texture,
+            font,
         }
     }
 
@@ -83,6 +92,7 @@ impl Canvas for SfmlCanvas {
         self.render_yarns(&game_state.yarns);
         self.render_player(&game_state.player);
         self.render_walls(&game_state.walls);
+        self.render_winning_text(game_state.winning());
 
         self.window.display();
     }
@@ -145,8 +155,13 @@ impl Canvas for SfmlCanvas {
         self.window.is_open()
     }
 
-    fn render_winning_text(&mut self) {
-        
+    fn render_winning_text(&mut self, winning: bool) {
+        if winning {
+            let mut text = Text::new("FUCK YEAH\nYOU WIN!!", &self.font, 34);
+            text.set_position(Vector2f::new(540.0,100.0));
+            self.window.draw(&text);
+            
+        }
     }
 }
 

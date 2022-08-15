@@ -1,4 +1,4 @@
-use crate::game::types::{Position, Size};
+use crate::game::types::{Size};
 use super::board_element::BoardElement;
 
 pub struct Board {
