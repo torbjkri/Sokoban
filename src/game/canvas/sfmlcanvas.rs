@@ -7,7 +7,7 @@ use super::super::player::Player;
 use super::{Canvas, CanvasEvents, BOARD_MARGINS, UNIT_SIZE};
 use crate::game::types::{Position, Size};
 use sfml::{
-    graphics::{RenderTarget, RenderWindow, Texture, Transformable, Font, Text},
+    graphics::{RenderTarget, RenderWindow, Texture, Transformable, Font, Text, Color},
     system::{Vector2f, Vector2u},
     window::{ContextSettings, Event, Key, Style, VideoMode},
     SfBox,
@@ -86,6 +86,7 @@ impl Canvas for SfmlCanvas {
     }
 
     fn render(&mut self, game_state: &mut GameState) {
+        self.window.clear(Color::BLACK);
         self.window.set_active(true);
         self.render_board();
         self.render_baskets(&game_state.baskets);

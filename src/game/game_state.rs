@@ -21,11 +21,10 @@ impl GameState {
         let mut yarns = Vec::new();
         yarns.push(Yarn::new(Position::new(1, 1)));
         yarns.push(Yarn::new(Position::new(4, 3)));
-        yarns.push(Yarn::new(Position::new(7, 7)));
 
         let mut baskets = Vec::new();
-        baskets.push(Basket::new(Position::new(3, 3)));
-        baskets.push(Basket::new(Position::new(6, 4)));
+        baskets.push(Basket::new(Position::new(3, 4)));
+        baskets.push(Basket::new(Position::new(6, 7)));
 
         let mut walls = Vec::new();
         walls.push(Wall::new(Position::new(6,6)));
@@ -34,6 +33,47 @@ impl GameState {
             board: Board::new(Size::new(8, 8)),
             yarns: yarns,
             player: Player::new(Position::new(0, 0)),
+            baskets: baskets,
+            walls: walls,
+        }
+    }
+
+    pub fn level1() -> Self {
+        let mut walls = Vec::new();
+        walls.push(Wall::new(Position::new(0,0)));
+        walls.push(Wall::new(Position::new(1,0)));
+        walls.push(Wall::new(Position::new(2,0)));
+        walls.push(Wall::new(Position::new(3,0)));
+        walls.push(Wall::new(Position::new(4,0)));
+        walls.push(Wall::new(Position::new(0,1)));
+        walls.push(Wall::new(Position::new(4,1)));
+        walls.push(Wall::new(Position::new(0,2)));
+        walls.push(Wall::new(Position::new(2,2)));
+        walls.push(Wall::new(Position::new(4,2)));
+        walls.push(Wall::new(Position::new(5,2)));
+        walls.push(Wall::new(Position::new(6,2)));
+        walls.push(Wall::new(Position::new(0,3)));
+        walls.push(Wall::new(Position::new(6,3)));
+        walls.push(Wall::new(Position::new(0,4)));
+        walls.push(Wall::new(Position::new(1,4)));
+        walls.push(Wall::new(Position::new(2,4)));
+        walls.push(Wall::new(Position::new(3,4)));
+        walls.push(Wall::new(Position::new(4,4)));
+        walls.push(Wall::new(Position::new(5,4)));
+        walls.push(Wall::new(Position::new(6,4)));
+
+        let mut yarns = Vec::new();
+        yarns.push(Yarn::new(Position::new(3,2)));
+        yarns.push(Yarn::new(Position::new(2,3)));
+
+        let mut baskets = Vec::new();
+        baskets.push(Basket::new(Position::new(4,3)));
+        baskets.push(Basket::new(Position::new(5,3)));
+
+        Self {
+            board: Board::new(Size::new(8, 8)),
+            yarns: yarns,
+            player: Player::new(Position::new(1, 1)),
             baskets: baskets,
             walls: walls,
         }

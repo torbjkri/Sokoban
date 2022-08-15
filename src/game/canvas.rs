@@ -5,9 +5,9 @@ use super::yarn::Yarn;
 use super::wall::Wall;
 use super::basket::Basket;
 
-const BOARD_SIZE: Size = Size::new(480, 480);
-const UNIT_SIZE: Size = Size::new(60, 60);
-const BOARD_MARGINS: Size = Size::new(40, 60);
+const BOARD_SIZE: Size = Size::new(800, 800);
+const UNIT_SIZE: Size = Size::new(40, 40);
+const BOARD_MARGINS: Size = Size::new(20, 20);
 
 pub struct CanvasEvents {
     pub a_pressed: bool,

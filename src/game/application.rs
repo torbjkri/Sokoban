@@ -2,7 +2,7 @@ use super::canvas::{Canvas};
 use super::game_state::GameState;
 use super::types::Size;
 
-pub const CANVAS_SIZE: Size = Size::new(800, 600);
+pub const CANVAS_SIZE: Size = Size::new(1200, 840);
 
 pub struct Application<T: Canvas> {
     pub canvas: T,
