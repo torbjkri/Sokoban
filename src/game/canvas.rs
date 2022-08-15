@@ -2,6 +2,7 @@ use super::game_state::GameState;
 use super::player::Player;
 use super::types::Size;
 use super::yarn::Yarn;
+use super::wall::Wall;
 use super::basket::Basket;
 
 const BOARD_SIZE: Size = Size::new(480, 480);
@@ -35,8 +36,11 @@ pub trait Canvas {
     fn render_baskets(&mut self, yarn: &Vec<Basket>);
     fn render_player(&mut self, yarn: &Player);
     fn render_board(&mut self);
+    fn render_walls(&mut self, walls: &Vec<Wall>);
+    fn render_wall(&mut self, wall: &Wall);
     fn is_open(&self) -> bool;
     fn poll_events(&mut self) -> CanvasEvents;
+    fn render_winning_text(&mut self);
 }
 
 pub use self::sfmlcanvas::SfmlCanvas;

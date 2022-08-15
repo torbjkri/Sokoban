@@ -2,6 +2,7 @@ use super::super::board_element::BoardElement;
 use super::super::game_state::GameState;
 use super::super::yarn::Yarn;
 use super::super::basket::Basket;
+use super::super::wall::Wall;
 use super::super::player::Player;
 use super::{Canvas, CanvasEvents, BOARD_MARGINS, UNIT_SIZE};
 use crate::game::types::{Position, Size};
@@ -17,7 +18,8 @@ pub struct SfmlCanvas {
     board_texture: SfBox<Texture>,
     box_texture: SfBox<Texture>,
     player_texture: SfBox<Texture>,
-    basket_texture: SfBox<Texture>
+    basket_texture: SfBox<Texture>,
+    wall_texture: SfBox<Texture>
 }
 
 impl Canvas for SfmlCanvas {
@@ -34,12 +36,15 @@ impl Canvas for SfmlCanvas {
         let box_texture = load_texture_file("assets/niceboxsprite.jpg");
         let player_texture = load_texture_file("assets/cola.jpg");
         let basket_texture = load_texture_file("assets/pant-kasse.jpg");
+        let wall_texture = load_texture_file("assets/fake.jpg");
+
         SfmlCanvas {
             window,
             board_texture,
             box_texture,
             player_texture,
             basket_texture,
+            wall_texture,
         }
     }
 
@@ -77,6 +82,7 @@ impl Canvas for SfmlCanvas {
         self.render_baskets(&game_state.baskets);
         self.render_yarns(&game_state.yarns);
         self.render_player(&game_state.player);
+        self.render_walls(&game_state.walls);
 
         self.window.display();
     }
@@ -123,8 +129,24 @@ impl Canvas for SfmlCanvas {
         self.window.draw(&sprite);
     }
 
+    fn render_wall(&mut self, wall: &Wall) {
+        let mut sprite = sfml::graphics::Sprite::with_texture(&self.wall_texture);
+        sprite.set_scale(texture_scale(self.wall_texture.size(), Vector2u::new(1, 1)));
+        sprite.set_position(canvas_position_from_board_position(wall.board_position()));
+        self.window.draw(&sprite);
+    }
+    fn render_walls(&mut self, walls: &Vec<Wall>) {
+        for wall in walls.iter() {
+            self.render_wall(wall);
+        }
+    }
+
     fn is_open(&self) -> bool {
         self.window.is_open()
+    }
+
+    fn render_winning_text(&mut self) {
+        
     }
 }
 
