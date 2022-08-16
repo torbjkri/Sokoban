@@ -1,7 +1,5 @@
-use super::board_element::BoardElement;
+use super::board_element::{BoardElement, BoardElementVariant};
 use crate::game::types::Position;
-
-
 
 #[derive(Copy, Clone)]
 pub struct Wall {
@@ -10,9 +8,7 @@ pub struct Wall {
 
 impl Wall {
     pub fn new(position: Position) -> Self {
-        Self {
-            position,
-        }
+        Self { position }
     }
 }
 
@@ -23,5 +19,9 @@ impl BoardElement for Wall {
 
     fn check_collision(&self, other: &dyn BoardElement) -> bool {
         self.board_position() == other.board_position()
+    }
+
+    fn variant(&self) -> BoardElementVariant {
+        BoardElementVariant::Wall
     }
 }

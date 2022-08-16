@@ -1,9 +1,6 @@
 use super::game_state::GameState;
-use super::player::Player;
 use super::types::Size;
-use super::yarn::Yarn;
-use super::wall::Wall;
-use super::basket::Basket;
+use super::board_element::BoardElement;
 
 const BOARD_SIZE: Size = Size::new(800, 800);
 const UNIT_SIZE: Size = Size::new(40, 40);
@@ -30,14 +27,8 @@ impl CanvasEvents {
 pub trait Canvas {
     fn new(size: Size) -> Self;
     fn render(&mut self, game_state: &mut GameState);
-    fn render_yarn(&mut self, yarn: &Yarn);
-    fn render_yarns(&mut self, yarn: &Vec<Yarn>);
-    fn render_basket(&mut self, yarn: &Basket);
-    fn render_baskets(&mut self, yarn: &Vec<Basket>);
-    fn render_player(&mut self, yarn: &Player);
-    fn render_board(&mut self);
-    fn render_walls(&mut self, walls: &Vec<Wall>);
-    fn render_wall(&mut self, wall: &Wall);
+    fn render_board_elements<T: BoardElement>(&mut self, elements: &Vec<T>);
+    fn render_board_element(&mut self, element: &dyn BoardElement);
     fn is_open(&self) -> bool;
     fn poll_events(&mut self) -> CanvasEvents;
     fn render_winning_text(&mut self, winning: bool);

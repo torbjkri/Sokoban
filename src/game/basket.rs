@@ -1,4 +1,4 @@
-use super::board_element::BoardElement;
+use super::board_element::{BoardElement, BoardElementVariant};
 use crate::game::types::Position;
 
 
@@ -23,5 +23,9 @@ impl BoardElement for Basket {
 
     fn check_collision(&self, other: &dyn BoardElement) -> bool {
         self.board_position() == other.board_position()
+    }
+
+    fn variant(&self) -> BoardElementVariant {
+        BoardElementVariant::Basket
     }
 }

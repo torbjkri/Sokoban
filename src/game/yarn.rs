@@ -1,4 +1,4 @@
-use super::board_element::{BoardElement};
+use super::board_element::{BoardElement, BoardElementVariant};
 use super::movable::{Movable, Move};
 use crate::game::types::{Position};
 
@@ -24,6 +24,10 @@ impl BoardElement for Yarn {
 
     fn check_collision(&self, other: &dyn BoardElement) -> bool {
         self.board_position() == other.board_position()
+    }
+
+    fn variant(&self) -> BoardElementVariant {
+        BoardElementVariant::Yarn
     }
 }
 
