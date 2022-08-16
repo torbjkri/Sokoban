@@ -15,6 +15,8 @@ pub use self::basket::Basket;
 mod basket;
 pub use self::wall::Wall;
 mod wall;
+pub use self::floor::Floor;
+mod floor;
 pub use self::game_state::GameState;
 mod game_state;
 mod types;

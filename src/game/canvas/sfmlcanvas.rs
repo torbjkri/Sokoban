@@ -16,6 +16,7 @@ pub struct SfmlCanvas {
     player_texture: SfBox<Texture>,
     basket_texture: SfBox<Texture>,
     wall_texture: SfBox<Texture>,
+    floor_texture: SfBox<Texture>,
     font: SfBox<Font>,
 }
 
@@ -30,10 +31,11 @@ impl Canvas for SfmlCanvas {
         window.set_framerate_limit(60);
 
         let board_texture = load_texture_file("assets/board8by8.png");
-        let box_texture = load_texture_file("assets/niceboxsprite.jpg");
-        let player_texture = load_texture_file("assets/cola.jpg");
-        let basket_texture = load_texture_file("assets/pant-kasse.jpg");
-        let wall_texture = load_texture_file("assets/fake.jpg");
+        let box_texture = load_texture_file("assets/yarn.jpg");
+        let player_texture = load_texture_file("assets/player.jpg");
+        let basket_texture = load_texture_file("assets/basket.jpg");
+        let wall_texture = load_texture_file("assets/floor.jpg");
+        let floor_texture = load_texture_file("assets/wall.jpg");
         let find_font = || -> SfBox<Font> {
             match Font::from_file("assets/LEMONMILK-Bold.otf") {
                 None => panic!("Unable to read font!"),
@@ -50,6 +52,7 @@ impl Canvas for SfmlCanvas {
             basket_texture,
             wall_texture,
             font,
+            floor_texture,
         }
     }
 
@@ -72,7 +75,7 @@ impl Canvas for SfmlCanvas {
                         canvas_events.s_pressed = true;
                     }
                     if let Key::D = code {
-                        canvas_events.d_pressed = true;
+                        canvas_events.d_pressed = true ;
                     }
                 }
                 _ => {}
@@ -84,6 +87,7 @@ impl Canvas for SfmlCanvas {
     fn render(&mut self, game_state: &mut GameState) {
         self.window.clear(Color::rgb(51,51,51));
         self.window.set_active(true);
+        self.render_board_elements(&game_state.floors);
         self.render_board_elements(&game_state.baskets);
         self.render_board_elements(&game_state.yarns);
         self.render_board_element(&game_state.player);
@@ -98,7 +102,7 @@ impl Canvas for SfmlCanvas {
             BoardElementVariant::Player => &self.player_texture,
             BoardElementVariant::Yarn => &self.box_texture,
             BoardElementVariant::Wall => &self.wall_texture,
-            BoardElementVariant::Floor => &self.wall_texture,
+            BoardElementVariant::Floor => &self.floor_texture,
             BoardElementVariant::Basket => &self.basket_texture
         };
         let mut sprite = sfml::graphics::Sprite::with_texture(&texture);

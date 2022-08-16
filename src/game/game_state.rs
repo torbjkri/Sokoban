@@ -6,6 +6,7 @@ use super::movable::Movable;
 use super::player::Player;
 use super::yarn::Yarn;
 use super::wall::Wall;
+use super::floor::Floor;
 use crate::game::types::{Position, Size};
 
 pub struct GameState {
@@ -14,6 +15,7 @@ pub struct GameState {
     pub player: Player,
     pub baskets: Vec<Basket>,
     pub walls: Vec<Wall>,
+    pub floors: Vec<Floor>,
 }
 
 impl GameState {
@@ -35,6 +37,7 @@ impl GameState {
             player: Player::new(Position::new(0, 0)),
             baskets: baskets,
             walls: walls,
+            floors: vec![],
         }
     }
 
@@ -62,6 +65,16 @@ impl GameState {
         walls.push(Wall::new(Position::new(5,4)));
         walls.push(Wall::new(Position::new(6,4)));
 
+        let mut floors = Vec::new();
+        floors.push(Floor::new(Position::new(1,1)));
+        floors.push(Floor::new(Position::new(2,1)));
+        floors.push(Floor::new(Position::new(3,1)));
+        floors.push(Floor::new(Position::new(1,2)));
+        floors.push(Floor::new(Position::new(3,2)));
+        floors.push(Floor::new(Position::new(1,3)));
+        floors.push(Floor::new(Position::new(2,3)));
+        floors.push(Floor::new(Position::new(3,3)));
+
         let mut yarns = Vec::new();
         yarns.push(Yarn::new(Position::new(3,2)));
         yarns.push(Yarn::new(Position::new(2,3)));
@@ -76,6 +89,7 @@ impl GameState {
             player: Player::new(Position::new(1, 1)),
             baskets: baskets,
             walls: walls,
+            floors: floors
         }
     }
 
