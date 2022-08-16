@@ -82,7 +82,7 @@ impl Canvas for SfmlCanvas {
     }
 
     fn render(&mut self, game_state: &mut GameState) {
-        self.window.clear(Color::BLACK);
+        self.window.clear(Color::rgb(51,51,51));
         self.window.set_active(true);
         self.render_board_elements(&game_state.baskets);
         self.render_board_elements(&game_state.yarns);
